@@ -186,14 +186,19 @@ Java prohibits to assign an instance of `ReadableList<String>` to a variable of 
 To fix this, the user can change the variable type to `ReadableList<? extends Object>` and everthing works fine.
 Kotlin approaches this problem in a different way. The type `T` can be marked as 'only produced' with the *out* keyword, so that the compiler instantly gets it: ``ReadableList`` is never gonna consume any `T`, which makes `T` covariant. 
 
-```kotlin
+```kotlin runnable
 abstract class ReadableList<out T> {
-    abstract fun get(): T
+    abstract operator fun get(i: Int): T
 }
-
-fun workWithReadableList(strings: ReadableList<String>) {
+fun main(args: Array<String>) {
+    class MyRl : ReadableList<String>() {
+        override fun get(i: Int): String = "simpleImpl"
+    }
+    println(workWithReadableList(MyRl()))
+}
+fun workWithReadableList(strings: ReadableList<String>): Any {
     val objects: ReadableList<Any> = strings // This is OK, since T is an out-parameter
-    // ...
+    return objects[0]
 }
 ```
 
