@@ -86,7 +86,7 @@ Object [] arr = new String [] {"hello", "world"};
 arr[1] = new Object(); //will throw Exception; java.lang.ArrayStoreException: java.lang.Object
 ----
 
-==== Generic Collections
+#### Generic Collections
 
 As of Java 1.5 we can use _Generics_ in order to tell the compiler which elements are supposed to be stored in our collections (i.e. List, Map, Queue, Set).
 Unlike arrays, generic collections are *invariant* in their parameterized type by default. This means you can't substitute a `List<Animal>` with a `List<Cat>`. It won't even compile.
@@ -135,7 +135,7 @@ Animal pet = contravariantAnimals.get(0); // will not compile
 TIP: Joshua Bloch created a rule of thumb in his fantastic book "Effective Java": 
 "Producer-``extends``, consumer-``super`` (*PECS*)"
 
-== Variance of collections types in Kotlin
+## Variance of collections types in Kotlin
 
 After we've seen what variance in general means and how Java makes use of these concepts, I'd like to get to this blog post's point. 
 Kotlin is different to Java regardings generics and also arrays in a few ways and it might look odd to an experienced Java developer at first glance.
@@ -144,7 +144,7 @@ The first and maybe easiest difference is: Arrays in Kotlin are *invariant*. Thi
 of type `Array<Object>`. This ensures compile time safety and prevents runtime errors like you may encounter in Java with its covariant arrays.
 But is there a way to safely work with subtyped arrays? Sure, there is - we'll look at it next.
 
-=== Declarion-site Variance
+### Declarion-site Variance
 As we've seen, Java uses so called "wildcard types" to make generics variant, which is said to be "the most tricky part[s] of Java's type system" footnote:[see http://kotlinlang.org/docs/reference/generics.html#type-projections]. The whole thing is called "use-site variance".
 Kotlin does not use these at all. Instead, in Kotlin we use _declarion-site_ variance. 
 Let's recall the initial problem again: Let's imagine, we have a class `ReadableList<E>` with one simple producer method `get():T`.
@@ -173,7 +173,7 @@ This approach has also been used in _C#_ sucessfully for some years already.
 
 TIP: The Kotlin rule to memorize: *Consumer in, Producer out* (CIPO)
 
-=== Use-site Variance, Type projections
+### Use-site Variance, Type projections
 
 Unfortunately, it is not always sufficient to have the opportunity of declaring a type parameter `T` as either *out* or *in*.
 Just think of arrays for example. An array offers methods for adding and receiving objects, so it cannot be either co- or contravariant in its type parameter.
@@ -193,7 +193,7 @@ fun copy(from: Array<out Any>, to: Array<Any>) {
 This example shows how `from` is declared as a consumer of its type and thus the method cannot do 'bad things' like adding to the `Array`. 
 This concept is called *type projection* since the array is restricted in its methods: only those methods that return type parameter `T` may be called.
 
-== Bottom line
+## Bottom line
 With this post I wanted to provide same basic information on the quite complex aspects of _variance_ in the context of generics. Mostly, Java was used 
 to demonstrate the concepts of co-, contra- and invariance, which are hard to understand in connection with Java's wildcard types.
 I've shown how Kotlin tries to simplify the whole thing using different approaches (declaration-site variance) and more obvious keywords (`in`, `out`).
