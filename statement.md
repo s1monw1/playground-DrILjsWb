@@ -53,12 +53,9 @@ Another aspect we want to consider is arrays and other kinds of generic collecti
 Arrays in Java are *covariant*
 in their type, which means an array of ``String``s can be assigned to a variable of type "Array of ``Object``".
 
-[[array_variance]]
-[source, java]
-.Array Variance
-----
+```java 
 Object [] arr = new String [] {"hello", "world"};
-----
+```
 
 Also, arrays are *covariant* in the types that they hold. This means you can add ``Integer``s, ``String``s or whatever kind of ``Object`` to an `Object []`.
 
@@ -74,8 +71,12 @@ It will cause an `ArrayStoreException` at runtime, easily shown here:
 
 
 ```java runnable
-Object [] arr = new String [] {"hello", "world"};
-arr[1] = new Object(); //will throw Exception; java.lang.ArrayStoreException: java.lang.Object
+public class Generics {
+    public static void main(String[] args) {
+        Object [] arr = new String [] {"hello", "world"};
+        arr[1] = new Object();//will throw Exception; java.lang.ArrayStoreException: java.lang.Object
+    }
+}
 ```
 
 #### Generic Collections
@@ -91,8 +92,23 @@ Fortunately, the user can specify the variance of type parameters himself when u
 The following code example shows how we declare a _covariant_ list of `Animal` and assign a list of ``Cat`` to it.
 
 ```java
-List<Cat> cats = new ArrayList<>();
-List<? extends Animal> animals = cats;
+import java.util.ArrayList;
+import java.util.List;
+
+abstract class Animal {
+}
+
+class Cat extends Animal {
+}
+
+public class Generics {
+    public static void main(String[] args) {
+        List<Cat> cats = new ArrayList<>();
+        cats.add(new Cat());
+        List<? extends Animal> animals = cats;
+        System.out.println("List contains: " + animals);
+    }
+}
 ```
 
 Anyways, such a covariant list is still different to an array, because the covariance is encoded in its type parameter. We can only _read_ from the list, whereas _adding_ is prohibited. The list is said to be a *Producer* of ``Animals``.
@@ -114,11 +130,24 @@ The difference is, we can not _read_ from a contravariant list, since it is uncl
 can _write_ to the list as we know that _at least_ ``Animal``s may be added. This allows us to safely add ``Cat``s as well as ``Dog``s. Such a list is said to be a *Consumer*.
 
 ```java runnable
-List<Animal> animals = new ArrayList<>();
-List<? super Animal> contravariantAnimals = animals;
-contravariantAnimals.add(new Cat());
-contravariantAnimals.add(new Dog());
-Animal pet = contravariantAnimals.get(0); // will not compile
+import java.util.ArrayList;
+import java.util.List;
+
+abstract class Animal {
+}
+
+class Cat extends Animal {
+}
+
+public class Generics {
+    public static void main(String[] args) {
+        List<Animal> animals = new ArrayList<>();
+        List<? super Animal> contravariantAnimals = animals;
+        contravariantAnimals.add(new Cat());
+        contravariantAnimals.add(new Dog());
+        Animal pet = contravariantAnimals.get(0); // will not compile
+    }
+}
 ```
 
 TIP: Joshua Bloch created a rule of thumb in his fantastic book "Effective Java": 
