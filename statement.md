@@ -59,10 +59,17 @@ Object [] arr = new String [] {"hello", "world"};
 
 Also, arrays are *covariant* in the types that they hold. This means you can add ``Integer``s, ``String``s or whatever kind of ``Object`` to an `Object []`.
 
-```java
-Object [] arr = new Object [2];
-arr[0] = 1;
-arr[1] = "2";
+```java runnable
+import java.util.Arrays;
+
+public class Main {
+    public static void main(String[] args) {
+        Object [] arr = new Object [2];
+        arr[0] = 1;
+        arr[1] = "2";
+        System.out.println(Arrays.toString(arr));
+    }
+}
 ````
 
 This seams to be quite handy but can cause errors at runtime. Looking at example <<array_variance>> again: The variable is of type `Object []` but the referenced object is a `String []`.
@@ -71,7 +78,7 @@ It will cause an `ArrayStoreException` at runtime, easily shown here:
 
 
 ```java runnable
-public class Generics {
+public class Main {
     public static void main(String[] args) {
         Object [] arr = new String [] {"hello", "world"};
         arr[1] = new Object();//will throw Exception; java.lang.ArrayStoreException: java.lang.Object
@@ -101,7 +108,7 @@ abstract class Animal {
 class Cat extends Animal {
 }
 
-public class Generics {
+public class Main {
     public static void main(String[] args) {
         List<Cat> cats = new ArrayList<>();
         cats.add(new Cat());
@@ -139,7 +146,7 @@ abstract class Animal {
 class Cat extends Animal {
 }
 
-public class Generics {
+class Generics {
     public static void main(String[] args) {
         List<Animal> animals = new ArrayList<>();
         List<? super Animal> contravariantAnimals = animals;
