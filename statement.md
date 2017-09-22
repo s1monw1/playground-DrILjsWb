@@ -13,7 +13,7 @@ There are three terms we need to take into account: _Covariance_, _Contravarianc
 
 ### Variance in Practice (Java)
 
-.Covariance
+#### Covariance
 In Java an overriding method needs to be *covariant* in its return types, i.e. the return types of the overridden and the overiding method must be in line with the direction of the inheritance tree of the involved classes. 
 A method `treat():Animal` of class `AnimalDoctor` can 
 be overriden with `treat():Cat` in class `CatDoctor`, which extends `AnimalDoctor`.
@@ -30,7 +30,7 @@ public class Cat extends Animal{}
 Subclasses can be cast _up_ the inheritance tree, while downcasting will cause an error here. This is also the case if we take a look at variable declarations. 
 It isn't a problem to assign an instance of `Cat` to a variable of type `Animal`, whereas doing the opposite will cause failure.
 
-.Contravariance
+#### Contravariance
 *Contravariance* on the other hand describes the exact opposite. In Java this concept only reveals itself when we work with generics, which I'm going to describe in depth later. 
 Just to make it clear, we can image another programming language that allows contravariant method arguments in overriding methods footnote:[In Java such a method would be treated as _overloaded_].
 Let's say we have a class `ClassB` which extends another class `ClassA` and overrides a method by changing the original parameter type `T'` to its supertype `T`.
@@ -41,7 +41,7 @@ Let's say we have a class `ClassB` which extends another class `ClassA` and over
 
 You can see that the type hierarchy of method parameter `t` is contrary to the hierarchy of the surrounding classes. Up versus down the tree, `method` is contravariant in its parameter type.
 
-.Invariance
+#### Invariance
 Last but not least, the easiest one: *Invariance*. It can be observed when we think of overriding methods in Java again like we've just seen in the example before. An overriding method must _accept_ just the same parameters as the overridden method. 
 This means we speak of invariance if the types of an aspect like "method parameters" do not differ in super- and subtype.
 
@@ -94,7 +94,7 @@ As a result it is not possible to run into unexpected runtime errors like it is 
 
 Fortunately, the user can specify the variance of type parameters himself when using generics, which we call _use-site variance_.
 
-.Covariant collections
+#### Covariant collections
 
 The following code example shows how we declare a _covariant_ list of `Animal` and assign a list of ``Cat`` to it.
 
@@ -139,7 +139,7 @@ public class Main {
 }
 ```
 
-.Contravariant collections
+#### Contravariant collections
 
 It is also possible to work with _contravariant_ collections. Such a list can be declared with the generic type parameter `? super Animal`, which means a lower bound of type `Animal`. 
 Such a list may be of type `List<Animal>` itself or a list of any super type of `Animal`, even ``Object``.
