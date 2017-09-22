@@ -98,9 +98,8 @@ Fortunately, the user can specify the variance of type parameters himself when u
 
 The following code example shows how we declare a _covariant_ list of `Animal` and assign a list of ``Cat`` to it.
 
-```java
-import java.util.ArrayList;
-import java.util.List;
+```java runnable
+import java.util.*;
 
 abstract class Animal {
 }
@@ -123,9 +122,21 @@ The generic type `? extends Animal` footnote:[`?` is the "wildcard" character] o
 This approach turns the runtime error encountered in <<runtimeerr_array>> into a compile error.
 
 ```java runnable
-List<Cat> cats = new ArrayList<>();
-List<? extends Animal> animals = cats;
-animals.add(new Cat()); //will not compile
+import java.util.*;
+
+abstract class Animal {
+}
+
+class Cat extends Animal {
+}
+
+public class Main {
+    public static void main(String[] args) {
+        List<Cat> cats = new ArrayList<>();
+        List<? extends Animal> animals = cats;
+        animals.add(new Cat()); //will not compile
+    }
+}
 ```
 
 .Contravariant collections
@@ -137,8 +148,7 @@ The difference is, we can not _read_ from a contravariant list, since it is uncl
 can _write_ to the list as we know that _at least_ ``Animal``s may be added. This allows us to safely add ``Cat``s as well as ``Dog``s. Such a list is said to be a *Consumer*.
 
 ```java runnable
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 abstract class Animal {
 }
@@ -204,13 +214,14 @@ As an alternative Kotlin also allows use-site variance, which is very similar to
 - `Array<in String>` corresponds to Java's `Array<? super String>`
 - `Array<out String>` corresponds to Java's `Array<? extends Object>`
 
-```kotlin
+```kotlin runnable
 fun copy(from: Array<out Any>, to: Array<Any>) {
- // ...
+    to[1] = from[1]//all right
+    from[1] = to[1]//does not compile because it's out-projected
 }
 ````
 
-This example shows how `from` is declared as a consumer of its type and thus the method cannot do 'bad things' like adding to the `Array`. 
+This example shows how `from` is declared as a producer of its type and thus the method cannot do 'bad things' like adding to the `Array`. 
 This concept is called *type projection* since the array is restricted in its methods: only those methods that return type parameter `T` may be called.
 
 ## Bottom line
