@@ -1,4 +1,4 @@
 title: Simple Kotlin Template
 plan:
-- title: Kotlin Snippet
+- title: Kotlin Generics and Variance
   statement: statement.md

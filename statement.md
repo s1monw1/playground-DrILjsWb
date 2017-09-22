@@ -1,15 +1,10 @@
 # Generic Types and Variance in Kotlin compared to Java
 
-
-:kotlin: http://kotlinlang.org[Kotlin]
-:mygh: https://github.com/s1monw1/kotlin_vertx_example/blob/master/README.md[GitHub]
-:liskov: https://en.wikipedia.org/wiki/Liskov_substitution_principle
-
 ## Basics - What is Variance?
 
 Many programming languages support the concept of _subtyping_, which allows us to implement hierarchies like "A `Cat` **IS-A**n ``Animal``".
 In Java we can either use the `extends` keyword in order to change/expand behaviour of an existing class (inheritance) or use `implements` to provide implementations for an interface.
-According to {liskov}[Liskov's substitution principle], every instance of a class `A` can be substituted by instances of its subtype `B`.
+According to <a href="https://en.wikipedia.org/wiki/Liskov_substitution_principle"> Liskov's substitution principle</a>, every instance of a class `A` can be substituted by instances of its subtype `B`.
 
 The word `variance`, often referred to in mathematics as well, is used to describe how subtyping 
 in complex aspects like method return types, type declarations or arrays relates to the direction of inheritance of the involved classes. 
@@ -67,24 +62,21 @@ Object [] arr = new String [] {"hello", "world"};
 
 Also, arrays are *covariant* in the types that they hold. This means you can add ``Integer``s, ``String``s or whatever kind of ``Object`` to an `Object []`.
 
-[source, java]
-----
+```java
 Object [] arr = new Object [2];
 arr[0] = 1;
 arr[1] = "2";
-----
+````
 
 This seams to be quite handy but can cause errors at runtime. Looking at example <<array_variance>> again: The variable is of type `Object []` but the referenced object is a `String []`.
 What happens if we pass the variable to a method expecting an array of ``Object``s? This method might want to add an `Object` to the array, which seems legit because the paramter is expected to be of type `Object []`.
 It will cause an `ArrayStoreException` at runtime, easily shown here:
 
-[[runtimeerr_array]]
-[source, java]
-.Array Runtime Error
-----
+
+```java runnable
 Object [] arr = new String [] {"hello", "world"};
 arr[1] = new Object(); //will throw Exception; java.lang.ArrayStoreException: java.lang.Object
-----
+```
 
 #### Generic Collections
 
@@ -98,22 +90,20 @@ Fortunately, the user can specify the variance of type parameters himself when u
 
 The following code example shows how we declare a _covariant_ list of `Animal` and assign a list of ``Cat`` to it.
 
-[source, java]
-----
+```java
 List<Cat> cats = new ArrayList<>();
 List<? extends Animal> animals = cats;
-----
+```
 
 Anyways, such a covariant list is still different to an array, because the covariance is encoded in its type parameter. We can only _read_ from the list, whereas _adding_ is prohibited. The list is said to be a *Producer* of ``Animals``.
 The generic type `? extends Animal` footnote:[`?` is the "wildcard" character] only indicated that the list contains _any_ type with an upper bound of `Animal`, which could mean list of `Cat`, `Dog` or any other animal.
 This approach turns the runtime error encountered in <<runtimeerr_array>> into a compile error.
 
-[source, java]
-----
+```java runnable
 List<Cat> cats = new ArrayList<>();
 List<? extends Animal> animals = cats;
 animals.add(new Cat()); //will not compile
-----
+```
 
 .Contravariant collections
 
@@ -123,14 +113,13 @@ Like with covariant lists, we do not know for sure which type the list really re
 The difference is, we can not _read_ from a contravariant list, since it is unclear if we will get ``Animal``s or just plain ``Object``s. But now we
 can _write_ to the list as we know that _at least_ ``Animal``s may be added. This allows us to safely add ``Cat``s as well as ``Dog``s. Such a list is said to be a *Consumer*.
 
-[source, java]
-----
+```java runnable
 List<Animal> animals = new ArrayList<>();
 List<? super Animal> contravariantAnimals = animals;
 contravariantAnimals.add(new Cat());
 contravariantAnimals.add(new Dog());
 Animal pet = contravariantAnimals.get(0); // will not compile
-----
+```
 
 TIP: Joshua Bloch created a rule of thumb in his fantastic book "Effective Java": 
 "Producer-``extends``, consumer-``super`` (*PECS*)"
@@ -145,17 +134,14 @@ of type `Array<Object>`. This ensures compile time safety and prevents runtime e
 But is there a way to safely work with subtyped arrays? Sure, there is - we'll look at it next.
 
 ### Declarion-site Variance
-As we've seen, Java uses so called "wildcard types" to make generics variant, which is said to be "the most tricky part[s] of Java's type system" footnote:[see http://kotlinlang.org/docs/reference/generics.html#type-projections]. The whole thing is called "use-site variance".
+As we've seen, Java uses so called "wildcard types" to make generics variant, which is said to be "the most tricky part[s] of Java's type system" (see http://kotlinlang.org/docs/reference/generics.html#type-projections). The whole thing is called "use-site variance".
 Kotlin does not use these at all. Instead, in Kotlin we use _declarion-site_ variance. 
 Let's recall the initial problem again: Let's imagine, we have a class `ReadableList<E>` with one simple producer method `get():T`.
 Java prohibits to assign an instance of `ReadableList<String>` to a variable of type  `ReadableLis<Object>` because generic types are invariant by default.
 To fix this, the user can change the variable type to `ReadableList<? extends Object>` and everthing works fine.
 Kotlin approaches this problem in a different way. The type `T` can be marked as 'only produced' with the *out* keyword, so that the compiler instantly gets it: ``ReadableList`` is never gonna consume any `T`, which makes `T` covariant. 
 
-[[kotlin_out]]
-[source, kotlin]
-.Kotlin `out`
-----
+```kotlin
 abstract class ReadableList<out T> {
     abstract fun get(): T
 }
@@ -164,7 +150,7 @@ fun workWithReadableList(strings: ReadableList<String>) {
     val objects: ReadableList<Any> = strings // This is OK, since T is an out-parameter
     // ...
 }
-----
+```
 
 As you can see in "<<kotlin_out>>" the type `T` is annotated as an `out` type via _declaration-site variance_ - it is also referred to as *variance annotation*.
 The compiler does not prohibit us to use T as an _covariant_ type.
@@ -182,13 +168,11 @@ As an alternative Kotlin also allows use-site variance, which is very similar to
 - `Array<in String>` corresponds to Java's `Array<? super String>`
 - `Array<out String>` corresponds to Java's `Array<? extends Object>`
 
-[source, kotlin]
-.Type projection Example
-----
+```kotlin
 fun copy(from: Array<out Any>, to: Array<Any>) {
  // ...
 }
-----
+````
 
 This example shows how `from` is declared as a consumer of its type and thus the method cannot do 'bad things' like adding to the `Array`. 
 This concept is called *type projection* since the array is restricted in its methods: only those methods that return type parameter `T` may be called.
@@ -203,10 +187,4 @@ where it's not necessary to use complex declarations like we're used to in Java.
 
 I hope this makes sense to you :-)
 
-This Kotlin template lets you get started quickly with a simple one-page playground.
 
-```kotlin runnable
-fun main(args: Array<String>) {
-    println("Hello, World!")
-}
-```
