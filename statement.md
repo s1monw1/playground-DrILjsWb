@@ -188,15 +188,17 @@ Kotlin approaches this problem in a different way. The type `T` can be marked as
 abstract class ReadableList<out T> {
     abstract operator fun get(i: Int): T
 }
+
+fun workWithReadableList(strings: ReadableList<String>): Any {
+    val objects: ReadableList<Any> = strings // This is OK, since T is an out-parameter
+    return objects[0]
+}
+
 fun main(args: Array<String>) {
     class MyRl : ReadableList<String>() {
         override fun get(i: Int): String = "simpleImpl"
     }
     println(workWithReadableList(MyRl()))
-}
-fun workWithReadableList(strings: ReadableList<String>): Any {
-    val objects: ReadableList<Any> = strings // This is OK, since T is an out-parameter
-    return objects[0]
 }
 ```
 
