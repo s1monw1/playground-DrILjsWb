@@ -14,7 +14,7 @@ There are three terms we need to take into account: _Covariance_, _Contravarianc
 ### Variance in Practice (Java)
 
 #### Covariance
-In Java an overriding method needs to be *covariant* in its return types, i.e. the return types of the overridden and the overiding method must be in line with the direction of the inheritance tree of the involved classes. 
+In Java an overriding method needs to be *covariant* in its return types, i.e. the return types of the overridden and the overriding method must be in line with the direction of the inheritance tree of the involved classes. 
 A method `treat():Animal` of class `AnimalDoctor` can 
 be overriden with `treat():Cat` in class `CatDoctor`, which extends `AnimalDoctor`.
 Another example of covariance would be type conversion, shown here:
@@ -32,14 +32,14 @@ It isn't a problem to assign an instance of `Cat` to a variable of type `Animal`
 
 #### Contravariance
 *Contravariance* on the other hand describes the exact opposite. In Java this concept only reveals itself when we work with generics, which I'm going to describe in depth later. 
-Just to make it clear, we can image another programming language that allows contravariant method arguments in overriding methods footnote:[In Java such a method would be treated as _overloaded_].
-Let's say we have a class `ClassB` which extends another class `ClassA` and overrides a method by changing the original parameter type `T'` to its supertype `T`.
+Just to make it clear, we could image another programming language that allows contravariant method arguments in overriding methods (In Java such a method would be treated as _overloaded_).
+Let's say we have a class `ClassB` that extends class `ClassA` and overrides a method by changing the original parameter type `T'` to its supertype `T`:
 
 `ClassA::method(t:T')`
 
 `ClassB::method(t:T)`
 
-You can see that the type hierarchy of method parameter `t` is contrary to the hierarchy of the surrounding classes. Up versus down the tree, `method` is contravariant in its parameter type.
+You can see that the type hierarchy of method parameter `t` is contrary to the hierarchy of the surrounding classes. _Up_ versus _down_ the tree, `method` is contravariant in its parameter type.
 
 #### Invariance
 Last but not least, the easiest one: *Invariance*. It can be observed when we think of overriding methods in Java again like we've just seen in the example before. An overriding method must _accept_ just the same parameters as the overridden method. 
