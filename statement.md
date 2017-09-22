@@ -48,7 +48,7 @@ This means we speak of invariance if the types of an aspect like "method paramet
 ### Variance of collection types in Java
 Another aspect we want to consider is arrays and other kinds of generic collections. 
 
-#### Arrays
+<b>Arrays</b>
 
 Arrays in Java are *covariant*
 in their type, which means an array of ``String``s can be assigned to a variable of type "Array of ``Object``".
@@ -72,9 +72,9 @@ public class Main {
 }
 ````
 
-This seams to be quite handy but can cause errors at runtime. Looking at example <<array_variance>> again: The variable is of type `Object []` but the referenced object is a `String []`.
+This seams to be quite handy but can cause errors at runtime. Consider the example above: The variable is of type `Object []` but the referenced object is a `String []`.
 What happens if we pass the variable to a method expecting an array of ``Object``s? This method might want to add an `Object` to the array, which seems legit because the paramter is expected to be of type `Object []`.
-It will cause an `ArrayStoreException` at runtime, easily shown here:
+It will cause an `ArrayStoreException` <b>at runtime</b>, easily shown here:
 
 
 ```java runnable
@@ -86,15 +86,15 @@ public class Main {
 }
 ```
 
-#### Generic Collections
+<b>Generic Collections</b>
 
 As of Java 1.5 we can use _Generics_ in order to tell the compiler which elements are supposed to be stored in our collections (i.e. List, Map, Queue, Set).
 Unlike arrays, generic collections are *invariant* in their parameterized type by default. This means you can't substitute a `List<Animal>` with a `List<Cat>`. It won't even compile.
 As a result it is not possible to run into unexpected runtime errors like it is when working with covariant arrays. As a drawback, we are much more inflexible regarding subtyping of collections. 
 
-Fortunately, the user can specify the variance of type parameters himself when using generics, which we call _use-site variance_.
+Fortunately, the user can specify the variance of type parameters when using generics; a process being called _use-site variance_.
 
-#### Covariant collections
+1. Covariant collections
 
 The following code example shows how we declare a _covariant_ list of `Animal` and assign a list of ``Cat`` to it.
 
@@ -118,7 +118,7 @@ public class Main {
 ```
 
 Anyways, such a covariant list is still different to an array, because the covariance is encoded in its type parameter. We can only _read_ from the list, whereas _adding_ is prohibited. The list is said to be a *Producer* of ``Animals``.
-The generic type `? extends Animal` footnote:[`?` is the "wildcard" character] only indicated that the list contains _any_ type with an upper bound of `Animal`, which could mean list of `Cat`, `Dog` or any other animal.
+The generic type `? extends Animal` (`?` is the "wildcard" character) only indicated that the list contains _any_ type with an upper bound of `Animal`, which could mean list of `Cat`, `Dog` or any other animal.
 This approach turns the runtime error encountered in <<runtimeerr_array>> into a compile error.
 
 ```java runnable
@@ -139,7 +139,7 @@ public class Main {
 }
 ```
 
-#### Contravariant collections
+2. Contravariant collections
 
 It is also possible to work with _contravariant_ collections. Such a list can be declared with the generic type parameter `? super Animal`, which means a lower bound of type `Animal`. 
 Such a list may be of type `List<Animal>` itself or a list of any super type of `Animal`, even ``Object``.
