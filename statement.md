@@ -13,7 +13,7 @@ There are three terms we need to take into account: _Covariance_, _Contravarianc
 
 ### Variance in Practice (Java)
 
-<b> Covariance</b>
+<b> Covariance</b></br>
 In Java an overriding method needs to be *covariant* in its return types, i.e. the return types of the overridden and the overriding method must be in line with the direction of the inheritance tree of the involved classes. 
 A method `treat():Animal` of class `AnimalDoctor` can 
 be overriden with `treat():Cat` in class `CatDoctor`, which extends `AnimalDoctor`.
@@ -30,7 +30,7 @@ public class Cat extends Animal{}
 Subclasses can be cast _up_ the inheritance tree, while downcasting will cause an error here. This is also the case if we take a look at variable declarations. 
 It isn't a problem to assign an instance of `Cat` to a variable of type `Animal`, whereas doing the opposite will cause failure.
 
-<b> Contravariance</b>
+<b> Contravariance</b></br>
 *Contravariance* on the other hand describes the exact opposite. In Java this concept only reveals itself when we work with generics, which I'm going to describe in depth later. 
 Just to make it clear, we could image another programming language that allows contravariant method arguments in overriding methods (In Java such a method would be treated as _overloaded_).
 Let's say we have a class `ClassB` that extends class `ClassA` and overrides a method by changing the original parameter type `T'` to its supertype `T`:
@@ -41,15 +41,14 @@ Let's say we have a class `ClassB` that extends class `ClassA` and overrides a m
 
 You can see that the type hierarchy of method parameter `t` is contrary to the hierarchy of the surrounding classes. _Up_ versus _down_ the tree, `method` is contravariant in its parameter type.
 
-<b> Invariance</b>
+<b> Invariance</b></br>
 Last but not least, the easiest one: *Invariance*. It can be observed when we think of overriding methods in Java again like we've just seen in the example before. An overriding method must _accept_ just the same parameters as the overridden method. 
 This means we speak of invariance if the types of an aspect like "method parameters" do not differ in super- and subtype.
 
 ### Variance of collection types in Java
 Another aspect we want to consider is arrays and other kinds of generic collections. 
 
-<b>Arrays</b>
-
+<b>Arrays</b></br>
 Arrays in Java are *covariant*
 in their type, which means an array of ``String``s can be assigned to a variable of type "Array of ``Object``".
 
@@ -86,8 +85,7 @@ public class Main {
 }
 ```
 
-<b>Generic Collections</b>
-
+<b>Generic Collections</b></br>
 As of Java 1.5 we can use _Generics_ in order to tell the compiler which elements are supposed to be stored in our collections (i.e. List, Map, Queue, Set).
 Unlike arrays, generic collections are *invariant* in their parameterized type by default. This means you can't substitute a `List<Animal>` with a `List<Cat>`. It won't even compile.
 As a result it is not possible to run into unexpected runtime errors like it is when working with covariant arrays. As a drawback, we are much more inflexible regarding subtyping of collections. 
