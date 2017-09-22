@@ -76,7 +76,7 @@ This seams to be quite handy but can cause errors at runtime. Consider the examp
 What happens if we pass the variable to a method expecting an array of ``Object``s? This method might want to add an `Object` to the array, which seems legit because the paramter is expected to be of type `Object []`.
 It will cause an `ArrayStoreException` <b>at runtime</b>, easily shown here:
 
-
+_ArrayStoreException-Example_
 ```java runnable
 public class Main {
     public static void main(String[] args) {
@@ -119,7 +119,7 @@ public class Main {
 
 Anyways, such a covariant list is still different to an array, because the covariance is encoded in its type parameter. We can only _read_ from the list, whereas _adding_ is prohibited. The list is said to be a *Producer* of ``Animals``.
 The generic type `? extends Animal` (`?` is the "wildcard" character) only indicated that the list contains _any_ type with an upper bound of `Animal`, which could mean list of `Cat`, `Dog` or any other animal.
-This approach turns the runtime error encountered in <<runtimeerr_array>> into a compile error.
+This approach turns the runtime error encountered in _ArrayStoreException-Example_ into a compile error.
 
 ```java runnable
 import java.util.*;
@@ -167,8 +167,7 @@ class Generics {
 }
 ```
 
-TIP: Joshua Bloch created a rule of thumb in his fantastic book "Effective Java": 
-"Producer-``extends``, consumer-``super`` (*PECS*)"
+TIP: Joshua Bloch created a rule of thumb in his fantastic book <a target="_blank" href="https://www.amazon.de/gp/product/0321356683/ref=as_li_tl?ie=UTF8&camp=1638&creative=6742&creativeASIN=0321356683&linkCode=as2&tag=simonwirtzde-21&linkId=69c17cb9d4707cb2390b66376c935d43">_Effective Java_:</a><img src="//ir-de.amazon-adsystem.com/e/ir?t=simonwirtzde-21&l=am2&o=3&a=0321356683" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />        <b>Producer-``extends``, consumer-``super`` (*PECS*)</b>
 
 ## Variance of collections types in Kotlin
 
@@ -229,9 +228,10 @@ With this post I wanted to provide same basic information on the quite complex a
 to demonstrate the concepts of co-, contra- and invariance, which are hard to understand in connection with Java's wildcard types.
 I've shown how Kotlin tries to simplify the whole thing using different approaches (declaration-site variance) and more obvious keywords (`in`, `out`).
 
-In my oppionion Kotlin really makes it better than Java and also eliminates another problem, which is covariant arrays. Allowing declaration-site variance simplifies a lot of client code 
+In my opinion Kotlin really improves generics compared to Java and also eliminates another problem, which is covariant arrays. Allowing declaration-site variance simplifies a lot of client code 
 where it's not necessary to use complex declarations like we're used to in Java. Also even if we have to fall back on use-site variance its a bit simpler.
 
-I hope this makes sense to you :-)
+If you like Kotlin and want to learn even more about it, I seriously like to suggest the fantastic book <a target="_blank" href="https://www.amazon.de/gp/product/1617293296/ref=as_li_tl?ie=UTF8&camp=1638&creative=6742&creativeASIN=1617293296&linkCode=as2&tag=simonwirtzde-21&linkId=e352b09b0e7f8a9b709c18b31fc8abf2">Kotlin in Action</a><img src="//ir-de.amazon-adsystem.com/e/ir?t=simonwirtzde-21&l=am2&o=3&a=1617293296" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /> to you. Also, if you like to get in touch with me, feel free to contact me on my <a target="_blank" href="https://blog.simon-wirtz.de">homepage</a> or visit me on <a href="https://twitter.com/s1m0nw1" target="_blank" >Twitter</a>.
 
+Have fun and best of luck with Kotlin!
 
