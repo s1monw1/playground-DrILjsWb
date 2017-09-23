@@ -202,7 +202,7 @@ fun main(args: Array<String>) {
 }
 ```
 
-As you can see in "<<kotlin_out>>" the type `T` is annotated as an `out` type via _declaration-site variance_ - it is also referred to as *variance annotation*.
+As you can see in the snippet, the type `T` is annotated as an `out` type via _declaration-site variance_ - it is also referred to as *variance annotation*.
 The compiler does not prohibit us to use T as an _covariant_ type.
 Of course there is also a complementary annotation to mark generic types as consumers, i.e. makes them _contravariant_: *in*.
 This approach has also been used in _C#_ sucessfully for some years already.
