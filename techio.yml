@@ -1,4 +1,4 @@
-title: Simple Kotlin Template
+title: Kotlin Generics and Variance compared to Java
 plan:
 - title: Kotlin Generics and Variance
   statement: statement.md
