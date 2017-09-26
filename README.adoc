@@ -1,0 +1,5 @@
+# Kotlin Generics and Variance
+
+This article is published under https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode[Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)].
+
+Feel free to share my article published on https://tech.io/playgrounds/6091/kotlin-generics-and-variance-compared-to-java
