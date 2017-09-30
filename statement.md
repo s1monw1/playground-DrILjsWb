@@ -164,7 +164,7 @@ class Cat extends Animal {
 class Dog extends Animal {
 }
 
-class Generics {
+class Main {
     public static void main(String[] args) {
         List<Animal> animals = new ArrayList<>();
         List<? super Animal> contravariantAnimals = animals;
