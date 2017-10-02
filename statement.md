@@ -190,7 +190,7 @@ But is there a way to safely work with subtyped arrays? Sure, there is - we'll l
 As we've seen, Java uses so called "wildcard types" to make generics variant, which is said to be "the most tricky part[s] of Java's type system" (see http://kotlinlang.org/docs/reference/generics.html#type-projections). The whole thing is called "use-site variance".
 Kotlin does not use these at all. Instead, in Kotlin we use _declarion-site_ variance. 
 Let's recall the initial problem again: Let's imagine, we have a class `ReadableList<E>` with one simple producer method `get():T`.
-Java prohibits to assign an instance of `ReadableList<String>` to a variable of type  `ReadableLis<Object>` because generic types are invariant by default.
+Java prohibits to assign an instance of `ReadableList<String>` to a variable of type  `ReadableList<Object>` because generic types are invariant by default.
 To fix this, the user can change the variable type to `ReadableList<? extends Object>` and everthing works fine.
 Kotlin approaches this problem in a different way. The type `T` can be marked as 'only produced' with the *out* keyword, so that the compiler instantly gets it: ``ReadableList`` is never gonna consume any `T`, which makes `T` covariant. 
 
